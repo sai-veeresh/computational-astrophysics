@@ -1,0 +1,152 @@
+! inlist to evolve a 15 solar mass star
+
+! For the sake of future readers of this file (yourself included),
+! ONLY include the controls you are actually using.  DO NOT include
+! all of the other controls that simply have their default values.
+
+&star_job
+
+   ! see star/defaults/star_job.defaults
+
+   ! begin with a pre-main sequence model
+   create_pre_main_sequence_model = .true.
+
+   ! save a model at the end of the run
+   save_model_when_terminate = .true.
+   save_model_filename = 'profile.mod'
+
+   ! display on-screen plots
+   pgstar_flag = .true.
+   change_net = .true.
+   new_net_name = 'approx21.net'
+
+
+/ ! end of star_job namelist
+
+
+&eos
+
+   ! eos options
+   ! see eos/defaults/eos.defaults
+
+/ ! end of eos namelist
+
+
+&kap
+
+   ! kap options
+   ! see kap/defaults/kap.defaults
+   use_Type2_opacities = .true.
+   Zbase = 0.02
+
+/ ! end of kap namelist
+
+
+&controls
+
+   ! see star/defaults/controls.defaults
+
+   ! starting specifications
+   initial_mass = 21 ! in Msun units
+   initial_z = 0.014
+
+   ! when to stop
+
+   ! stop when the star nears ZAMS (Lnuc/L > 0.99)
+   Lnuc_div_L_zams_limit = 0.99d0
+   stop_near_zams = .false.
+   
+
+   ! stop when the center mass fraction of h1 drops below this limit
+   !xa_central_lower_limit_species(1) = 'h1'
+   !xa_central_lower_limit(1) = 1d-3
+   !stop_at_core_collapse=.true.
+   fe_core_infall_limit=1d8
+
+   ! wind
+   hot_wind_scheme='Vink'
+   cool_wind_RGB_scheme='de Jager'
+   Dutch_scaling_factor=0.8
+   RGB_to_AGB_wind_switch=1d4
+   
+   ! ===== Massive star advanced burning stability =====
+
+!use_dvode_for_burn = .true.
+
+okay_to_reduce_gradT_excess = .true.
+!okay_to_remove_small_D_limit = .true.
+
+varcontrol_target = 1d-4
+
+mesh_delta_coeff = 0.3
+mesh_delta_coeff_for_highT = 0.1
+
+!dlogT_cntr_limit = 0.01
+!dlogT_cntr_hard_limit = 0.02
+
+!dlogRho_cntr_limit = 0.02
+!dlogRho_cntr_hard_limit = 0.05
+
+!xa_min_limit = 1d-12
+
+!newton_iterations_limit = 12
+!max_number_backups = 200
+
+min_timestep_limit = 1d-20
+
+hydro_mtx_max_allowed_logRho = 30
+Pextra_factor = 2
+
+mesh_delta_coeff = 0.5
+mesh_delta_coeff_for_highT = 0.1
+
+varcontrol_target = 1d-4
+
+!newton_iterations_limit = 8
+
+!tol_max_residual = 5d-4
+
+
+
+   ! atmosphere
+  
+
+   ! rotation
+
+   ! element diffusion
+
+   ! mlt
+
+   ! mixing
+   mixing_length_alpha=1.8
+   use_ledoux_criterion=.false.
+   alpha_semiconvection=0.1
+   
+
+   ! timesteps
+   max_years_for_timestep=1d3
+   !max_timestep=5d11
+   min_timestep_limit=1d-12
+   varcontrol_target=1d-3
+   
+
+   ! Chemical composition
+    initial_z = 0.014
+
+   ! mesh
+   mesh_delta_coeff=0.8
+   max_allowed_nz=12000
+   !use_GR_factors=.true.
+   !use_neu_reactions=.true.
+
+   ! solver
+   ! options for energy conservation (see MESA V, Section 3)
+   energy_eqn_option = 'dedt'
+   use_gold_tolerances = .true.
+
+   ! output
+   history_interval= 200
+   profile_interval=1000
+   terminal_interval=100
+
+/ ! end of controls namelist
